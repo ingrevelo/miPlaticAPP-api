@@ -42,12 +42,12 @@ async def make_movement(movement_in: MovementIn):
     user_in_db = get_user(movement_in.username)
 
     if user_in_db == None:
-        raise HTTPException(status_code=404, detail="El usuario no existe")
+        raise HTTPException(status_code=404, detail="El usuario ingresado no existe.")
 
-    if movement_in.movement_type == 'Egreso' and user_in_db.balance < movement_in.amount: 
-        raise HTTPException(status_code=400, detail="El gasto ingresado supera su balance actual de ahorro")
+    if movement_in.movement_type == 'outcome' and user_in_db.balance < movement_in.amount: 
+        raise HTTPException(status_code=400, detail="El gasto ingresado supera su balance actual.")
 
-    if movement_in.movement_type == 'Egreso':
+    if movement_in.movement_type == 'outcome':
         user_in_db.balance = user_in_db.balance - movement_in.amount
     else:
         user_in_db.balance = user_in_db.balance + movement_in.amount
