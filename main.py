@@ -37,7 +37,7 @@ async def get_balance(username: str):
 
 
 @api.put("/user/movement/")
-async def make_movement(movement_in: MovementIn):
+def make_movement(movement_in: MovementIn):
 
     user_in_db = get_user(movement_in.username)
 
