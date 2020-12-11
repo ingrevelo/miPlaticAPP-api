@@ -5,6 +5,7 @@ class MovementInDB(BaseModel):
     id_movement: int = 0
     username: str
     date: datetime = datetime.now()
+    movement: str
     movement_type: str
     movement_category: str
     description: str
