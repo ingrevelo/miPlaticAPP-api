@@ -1,6 +1,3 @@
-from fastapi import FastAPI, HTTPException
-api = FastAPI()
-
 from db.user_db import UserInDB
 from db.user_db import update_user, get_user
 from db.movement_db import MovementInDB
@@ -8,6 +5,20 @@ from db.movement_db import save_movement
 from models.user_models import UserIn, UserOut
 from models.movement_models import MovementIn, MovementOut
 import datetime
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+
+api = FastAPI()
+
+origins = [
+    "http://localhost.tiangolo.com", "https://localhost.tiangolo.com",
+    "http://localhost", "http://localhost:8080"
+]
+
+api.add_middleware(
+    CORSMiddleware, allow_origins=origins,
+    allow_credentials=True, allow_methods=["*"], allow_headers=["*"],
+)
 
 @api.post("/user/auth/")
 async def auth_user(user_in: UserIn):
