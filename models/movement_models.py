@@ -25,7 +25,14 @@ Modificado de acá hacia abajo
 """
 
 class ConsultaIn(BaseModel):
-    query: dict
+    username: str
+    movement: str = None
+    movement_type: str = None
+    movement_category: str = None
+    dateFrom: str = None
+    dateUntil: str = None
+    amountFrom: int = None
+    amountUntil: int = None
 
 class ConsultaOut(BaseModel):
     query: list

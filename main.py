@@ -84,6 +84,8 @@ async def get_consulta(consulta_in: ConsultaIn):
 
     if consulta_in_db == None:
         raise HTTPException(status_code=404, detail="El usuario no existe")
+    elif consulta_in_db == []:
+        raise HTTPException(status_code=404, detail="Su búsqueda no arrojó resultados")
 
     # consulta_out = ConsultaOut(**consulta_in_db)
 
