@@ -2,8 +2,9 @@ from db.user_db import UserInDB
 from db.user_db import update_user, get_user
 from db.movement_db import MovementInDB
 from db.movement_db import save_movement
+from db.movement_db import get_movement
 from models.user_models import UserIn, UserOut
-from models.movement_models import MovementIn, MovementOut
+from models.movement_models import MovementIn, MovementOut, ConsultaIn, ConsultaOut
 import datetime
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -71,3 +72,19 @@ async def make_movement(movement_in: MovementIn):
     movement_out = MovementOut(**movement_in_db.dict())
 
     return  movement_out
+
+"""
+Modificado de acá hacia abajo
+"""
+
+@api.get("/user/consulta/")
+async def get_consulta(consulta_in: ConsultaIn):
+
+    consulta_in_db = get_movement(consulta_in)
+
+    if consulta_in_db == None:
+        raise HTTPException(status_code=404, detail="El usuario no existe")
+
+    # consulta_out = ConsultaOut(**consulta_in_db)
+
+    return  consulta_in_db

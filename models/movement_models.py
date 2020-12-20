@@ -19,3 +19,13 @@ class MovementOut(BaseModel):
     description: str
     amount: int
     actual_balance: int
+
+"""
+Modificado de acá hacia abajo
+"""
+
+class ConsultaIn(BaseModel):
+    query: dict
+
+class ConsultaOut(BaseModel):
+    query: list
