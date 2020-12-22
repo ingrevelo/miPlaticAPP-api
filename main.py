@@ -2,9 +2,11 @@ from db.user_db import UserInDB
 from db.user_db import update_user, get_user
 from db.movement_db import MovementInDB
 from db.movement_db import save_movement
+from db.movement_db import get_movement
 from models.user_models import UserIn, UserOut
-from models.movement_models import MovementIn, MovementOut
+from models.movement_models import MovementIn, MovementOut, ConsultaIn, ConsultaOut
 import datetime
+from typing import List
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -27,7 +29,7 @@ async def auth_user(user_in: UserIn):
     user_in_db = get_user(user_in.username)
 
     if user_in_db == None:
-        raise HTTPException(status_code=404, detail="El usuario no existe")
+        raise HTTPException(status_code=404, detail="El usuario no se encuentra registrado")
 
     if user_in_db.password != user_in.password:
         return  {"Autenticado": False}
@@ -41,7 +43,7 @@ async def get_balance(username: str):
     user_in_db = get_user(username)
 
     if user_in_db == None:
-        raise HTTPException(status_code=404, detail="El usuario no existe")
+        raise HTTPException(status_code=404, detail="El usuario no se encuentra registrado")
 
     user_out = UserOut(**user_in_db.dict())
 
@@ -54,7 +56,7 @@ async def make_movement(movement_in: MovementIn):
     user_in_db = get_user(movement_in.username)
 
     if user_in_db == None:
-        raise HTTPException(status_code=404, detail="El usuario no existe")
+        raise HTTPException(status_code=404, detail="El usuario ingresado no existe")
 
     if movement_in.movement == 'outcome' and user_in_db.balance <= movement_in.amount: 
         raise HTTPException(status_code=400, detail="El gasto ingresado supera su balance actual de ahorro")
@@ -71,3 +73,12 @@ async def make_movement(movement_in: MovementIn):
     movement_out = MovementOut(**movement_in_db.dict())
 
     return  movement_out
+
+@api.get("/user/consulta/", response_model=List)
+async def get_consulta():
+    consulta_in_db = get_movement()
+     # if consulta_in_db == None:
+     #     raise HTTPException(status_code=404, detail="El usuario no existe")
+    if consulta_in_db == []:
+        raise HTTPException(status_code=404, detail="Su búsqueda no arrojó resultados")
+    return  consulta_in_db    
