@@ -74,11 +74,25 @@ async def make_movement(movement_in: MovementIn):
 
     return  movement_out
 
-@api.get("/user/consulta/", response_model=List)
-async def get_consulta():
-    consulta_in_db = get_movement()
-     # if consulta_in_db == None:
-     #     raise HTTPException(status_code=404, detail="El usuario no existe")
-    if consulta_in_db == []:
+@api.get("/user/consulta/")
+async def get_consulta(consulta_in: ConsultaIn):
+
+    consulta_in_db = get_movement(consulta_in)
+
+    if consulta_in_db == None:
+        raise HTTPException(status_code=404, detail="El usuario no existe")
+    elif consulta_in_db == []:
         raise HTTPException(status_code=404, detail="Su búsqueda no arrojó resultados")
+
+    # consulta_out = ConsultaOut(**consulta_in_db)
+
     return  consulta_in_db    
+
+# @api.get("/user/consulta/", response_model=List)
+# async def get_consulta():
+#     consulta_in_db = get_movement()
+#      # if consulta_in_db == None:
+#      #     raise HTTPException(status_code=404, detail="El usuario no existe")
+#     if consulta_in_db == []:
+#         raise HTTPException(status_code=404, detail="Su búsqueda no arrojó resultados")
+#     return  consulta_in_db    

@@ -119,9 +119,54 @@ def save_movement(movement_in_db: MovementInDB):
     database_movements.append(movement_in_db)
     return movement_in_db
 
-def get_movement():
-    database_movements
-    return database_movements
+def get_movement(query):
+    query = query.dict()
+    movements = []
+    data = database_movements
+    if get_user(query['username']) == None:
+        return None
+    else:
+        for key, value in query.items():
+            if value == None:
+                pass
+            else:
+                if key == 'dateFrom' or key == 'amountFrom':
+                    if key == 'dateFrom':
+                        key = 'date'
+                        value = value.split("-")
+                        value = datetime(int(value[0]),int(value[1]),int(value[2]))
+                    elif key == 'amountFrom':
+                        key = 'amount'
+                    for move in data:
+                        if move.dict()[key] >= value:
+                            movements.append(move)
+                    data = movements
+                    movements = []
+                elif key == 'dateUntil' or key == 'amountUntil':
+                    if key == 'dateUntil':
+                        key = 'date'
+                        value = value.split("-")
+                        value = datetime(int(value[0]),int(value[1]),int(value[2]))
+                    elif key == 'amountUntil':
+                        key = 'amount'
+                    for move in data:
+                        if move.dict()[key] <= value:
+                            movements.append(move)
+                    data = movements
+                    movements = []
+                else:
+                    for move in data:
+                        if move.dict()[key] == value:
+                            movements.append(move)
+                    data = movements
+                    movements = []
+
+        return data
+
+
+# def get_movement():
+#     database_movements
+#     return database_movements
 
     # query = query.dict()
     # movements = []
